@@ -1,10 +1,10 @@
 package ru.sokolovee.homework.dao;
 
-public class QuestionDao {
+public class QuestionDto {
     private String question;
     private String answer;
 
-    public QuestionDao(String question, String answer) {
+    public QuestionDto(String question, String answer) {
         this.question = question;
         this.answer = answer;
     }
@@ -13,15 +13,8 @@ public class QuestionDao {
         return question;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
     public String getAnswer() {
         return answer;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
 }

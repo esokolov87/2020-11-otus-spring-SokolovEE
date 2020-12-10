@@ -1,6 +1,6 @@
 package ru.sokolovee.homework.dao;
 
-public class StudentDao {
+public class StudentDto {
     private String name;
     private String surname;
     private Byte rate;
