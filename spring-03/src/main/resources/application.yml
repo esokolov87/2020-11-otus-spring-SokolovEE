@@ -1,0 +1,5 @@
+application:
+  fileUrl:
+    ru_RU: questions_ru.csv
+    en: questions_en.csv
+  locale: en
