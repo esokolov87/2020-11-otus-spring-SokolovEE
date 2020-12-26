@@ -22,10 +22,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class BookDaoJdbcTest {
 
     @Autowired
-    private AuthorDao authorDao;
-    @Autowired
-    private GenreDao genreDao;
-    @Autowired
     private BookDao bookDao;
 
     @DisplayName("возвращать книгу по его id")

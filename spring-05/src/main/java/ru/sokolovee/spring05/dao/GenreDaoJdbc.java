@@ -18,7 +18,7 @@ public class GenreDaoJdbc implements GenreDao {
     public Genre getById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return jdbcTemplate.queryForObject(
-                "select * from genre where id = :id", params, new GenreMapper()
+                "select id, name from genre where id = :id", params, new GenreMapper()
         );
     }
 }

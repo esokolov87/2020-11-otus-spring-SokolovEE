@@ -14,12 +14,10 @@ import java.util.Map;
 @AllArgsConstructor
 public class BookDaoJdbc implements BookDao {
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final GenreDao genreDao;
-    private final AuthorDao authorDao;
 
     @Override
     public int count() {
-        return jdbcTemplate.queryForObject("select count(*) from BOOK", (Map<String, ?>) null, Integer.class);
+        return jdbcTemplate.queryForObject("select count(id) from BOOK", (Map<String, ?>) null, Integer.class);
     }
 
     @Override
@@ -46,13 +44,22 @@ public class BookDaoJdbc implements BookDao {
     public Book getById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return jdbcTemplate.queryForObject(
-                "select * from book where id = :id", params, new BookMapper(authorDao, genreDao)
+                "select b.id, b.name, b.author_id, a.name as aname, b.genre_id, g.name as gname " +
+                        "from book b " +
+                        "join author a ON b.author_id = a.id " +
+                        "join genre g ON b.genre_id=g.id " +
+                        "where b.id = :id", params, new BookMapper()
         );
     }
 
     @Override
     public List<Book> getAll() {
-        return jdbcTemplate.query("select * from book", new BookMapper(authorDao, genreDao));
+        return jdbcTemplate.query(
+                "select b.id, b.name, b.author_id, a.name as aname, b.genre_id, g.name as gname " +
+                "from book b " +
+                "join author a ON b.author_id = a.id " +
+                "join genre g ON b.genre_id=g.id ", new BookMapper()
+        );
     }
 
     @Override

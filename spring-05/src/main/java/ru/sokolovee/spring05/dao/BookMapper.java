@@ -12,15 +12,12 @@ import java.sql.SQLException;
 @AllArgsConstructor
 class BookMapper implements RowMapper<Book> {
 
-    private final AuthorDao authorDao;
-    private final GenreDao genreDao;
-
     @Override
     public Book mapRow(ResultSet resultSet, int i) throws SQLException {
         long id = resultSet.getLong("id");
         String name = resultSet.getString("name");
-        Author author = authorDao.getById(resultSet.getLong("author_id"));
-        Genre genre = genreDao.getById(resultSet.getLong("genre_id"));
+        Author author = new Author(resultSet.getLong("author_id"), resultSet.getString("aname"));
+        Genre genre = new Genre(resultSet.getLong("genre_id"), resultSet.getString("gname"));
         return new Book(id, name, author, genre);
     }
 }
