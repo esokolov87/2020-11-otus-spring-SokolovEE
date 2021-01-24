@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sokolovee.spring06.entities.Comment;
+import ru.sokolovee.spring06.repositories.BookRepositoryJpaImpl;
 import ru.sokolovee.spring06.repositories.CommentRepositoryJpaImpl;
 
 import javax.persistence.EntityManager;
@@ -14,7 +15,7 @@ import javax.persistence.EntityManager;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Dao для работы с жанрами должно")
-@Import(CommentRepositoryJpaImpl.class)
+@Import({BookRepositoryJpaImpl.class, CommentRepositoryJpaImpl.class})
 @DataJpaTest
 @Transactional
 class CommentRepositoryJpaTest {
@@ -22,19 +23,21 @@ class CommentRepositoryJpaTest {
     @Autowired
     private CommentRepositoryJpaImpl commentJpa;
     @Autowired
+    private BookRepositoryJpaImpl bookRepository;
+    @Autowired
     private EntityManager em;
 
     @DisplayName("возвращать коментарий по его id")
     @Test
     void shouldGetComment() {
         assertThat(commentJpa.getById(1l))
-                .isEqualTo(new Comment(1l, 1l, "Книга Пушкина А.С. \"Руслан и Людмила\", жанр Классика"));
+                .isEqualTo(em.find(Comment.class, 1l));
     }
 
     @DisplayName("добавлять коментарий в БД")
     @Test
     void shouldInsertComment() {
-        var expectedComment = new Comment(5l, 1l, "еще 1 коментарий");
+        var expectedComment = new Comment(5l, bookRepository.getById(1l), "еще 1 коментарий");
         commentJpa.save(expectedComment);
         var actualComment = commentJpa.getById(5l);
         assertThat(actualComment)

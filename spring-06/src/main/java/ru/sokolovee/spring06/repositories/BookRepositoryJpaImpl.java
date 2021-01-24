@@ -43,12 +43,10 @@ public class BookRepositoryJpaImpl implements BookRepositoryJpa {
 
     @Override
     public Book getById(Long id) {
-        EntityGraph<?> entityGraph = em.getEntityGraph("book-entity-graph");
         TypedQuery<Book> query = em.createQuery("select b " +
                 "from Book b " +
                 "where b.id= :id", Book.class);
         query.setParameter("id", id);
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getSingleResult();
     }
 

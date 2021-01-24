@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sokolovee.spring06.entities.Author;
 import ru.sokolovee.spring06.entities.Book;
-import ru.sokolovee.spring06.entities.Comment;
 import ru.sokolovee.spring06.entities.Genre;
 import ru.sokolovee.spring06.repositories.AuthorRepositoryJpaImpl;
 import ru.sokolovee.spring06.repositories.BookRepositoryJpaImpl;
@@ -18,8 +17,6 @@ import ru.sokolovee.spring06.repositories.GenreRepositoryJpaImpl;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,7 +37,7 @@ class BookRepositoryJpaTest {
     @Test
     void shouldGetBook() {
         var actualBook = bookRepositoryJpa.getById(1l);
-        var expectedBook = new Book(1l, "Руслан и Людмила", new Author(1l, "Пушкин А.С."), new Genre(4l, "Классика"), Stream.of(new Comment(1l, 1l, "Книга Пушкина А.С. \"Руслан и Людмила\", жанр Классика")).collect(Collectors.toList()));
+        var expectedBook = em.find(Book.class, 1l);
         assertThat(actualBook)
                 .isNotNull()
                 .usingRecursiveComparison()
