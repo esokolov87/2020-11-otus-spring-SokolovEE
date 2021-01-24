@@ -12,6 +12,7 @@ import ru.sokolovee.spring07.repositories.BookRepository;
 import ru.sokolovee.spring07.repositories.CommentRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @ShellComponent
@@ -60,7 +61,7 @@ public class ShellComands {
 
     @ShellMethod(value = "create comment command", key = {"createComment", "cc"})
     public String createComment(@ShellOption Long id, @ShellOption String comment) {
-        commentRepository.save(new Comment(null,id, comment));
+        commentRepository.save(new Comment(null,bookRepository.findById(id).orElseThrow(), comment));
         return "Коментарий добавлен";
     }
 
@@ -83,5 +84,9 @@ public class ShellComands {
         return "Коментарий удален";
     }
 
-
+    @ShellMethod(value = "get comments by bookId command", key = {"getCommentByBookId", "gcbb"})
+    public List<Comment> getCommentsByBookId(@ShellOption Long id) {
+        Book book = bookRepository.findById(id).orElseThrow();
+        return book.getComments();
+    }
 }

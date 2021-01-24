@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sokolovee.spring07.entities.Comment;
+import ru.sokolovee.spring07.repositories.BookRepository;
 import ru.sokolovee.spring07.repositories.CommentRepository;
 
 import javax.persistence.EntityManager;
@@ -14,7 +15,6 @@ import javax.persistence.EntityManager;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Repository для работы с жанрами должно")
-@Import(CommentRepository.class)
 @DataJpaTest
 @Transactional
 class CommentRepositoryTest {
@@ -22,21 +22,23 @@ class CommentRepositoryTest {
     @Autowired
     private CommentRepository commentJpa;
     @Autowired
+    private BookRepository bookRepository;
+    @Autowired
     private EntityManager em;
 
     @DisplayName("возвращать коментарий по его id")
     @Test
     void shouldGetComment() {
-        assertThat(commentJpa.findById(1l))
-                .isEqualTo(new Comment(1l, 1l, "Книга Пушкина А.С. \"Руслан и Людмила\", жанр Классика"));
+        assertThat(commentJpa.findById(1l).orElse(null))
+                .isEqualTo(em.find(Comment.class, 1l));
     }
 
     @DisplayName("добавлять коментарий в БД")
     @Test
     void shouldInsertComment() {
-        var expectedComment = new Comment(5l, 1l, "еще 1 коментарий");
+        var expectedComment = new Comment(5l, bookRepository.findById(1l).orElse(null), "еще 1 коментарий");
         commentJpa.save(expectedComment);
-        var actualComment = commentJpa.findById(5l);
+        var actualComment = commentJpa.findById(5l).orElse(null);
         assertThat(actualComment)
                 .isNotNull()
                 .usingRecursiveComparison()
@@ -49,7 +51,7 @@ class CommentRepositoryTest {
         var expectedComment = commentJpa.findById(2l).orElse(null);
         expectedComment.setComment("updatedComment");
         commentJpa.save(expectedComment);
-        var actualComment = commentJpa.findById(2l);
+        var actualComment = commentJpa.findById(2l).orElse(null);
         assertThat(actualComment)
                 .isNotNull()
                 .usingRecursiveComparison()
@@ -60,7 +62,7 @@ class CommentRepositoryTest {
     @Test
     void shouldDeleteComment() {
         commentJpa.deleteById(1l);
-        assertThat(commentJpa.findById(1l))
+        assertThat(commentJpa.findById(1l).orElse(null))
                 .isNull();
     }
 }
