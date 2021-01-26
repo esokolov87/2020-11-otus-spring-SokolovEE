@@ -85,9 +85,9 @@ public class ShellComands {
     }
 
     @ShellMethod(value = "get comments by bookId command", key = {"getCommentByBookId", "gcbb"})
-    public List<Comment> getCommentsByBookId(@ShellOption Long id) {
+    public String getCommentsByBookId(@ShellOption Long id) {
         Book book = bookRepository.getById(id);
-        return book.getComments();
+        return book.getComments().toString();
     }
 
 
