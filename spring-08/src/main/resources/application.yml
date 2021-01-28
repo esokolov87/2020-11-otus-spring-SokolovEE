@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      database: spring-08
+
+mongock:
+  #runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.sokolovee.spring08.mongock.changelog
