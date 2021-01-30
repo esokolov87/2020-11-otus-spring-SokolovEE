@@ -45,15 +45,7 @@ class BookRepositoryTest {
         var actualBooks = bookRepository.findAll();
         assertThat(actualBooks)
                 .isNotNull()
-                .hasSize(4)
-                .containsExactlyInAnyOrderElementsOf(expectedBooks);
-    }
-
-    @DisplayName("возвращать колличесво книг в БД")
-    @Test
-    void shouldGetCountBooks() {
-        assertThat(bookRepository.count())
-                .isEqualTo(4);
+                .containsAll(expectedBooks);
     }
 
     @DisplayName("добавлять книгу в БД")
@@ -86,8 +78,6 @@ class BookRepositoryTest {
     @Test
     void shouldDeleteBook() {
         bookRepository.deleteById(2l);
-        assertThat(bookRepository.count())
-                .isEqualTo(3);
         assertThat(bookRepository.findById(2l))
                 .isEqualTo(Optional.empty());
     }
