@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book info</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+        input:read-only {
+            background: #d3d3d3;
+        }
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<a href="/bookList">Return to book list</a>
+<form id="book-form" th:action="@{/createBook}" th:method="post" action="addBook.html">
+    <h1>New Book:</h1>
+
+    <div class="row" hidden>
+        <label for="id-input">id:</label>
+        <input id="id-input" name="id" type="text" th:value="${book.id}"  value="0"/>
+    </div>
+
+    <div class="row" >
+        <label for="name-input">Name:</label>
+        <input id="name-input" name="name" type="text" th:value="${book.name}"  value="Мастер и Маргарита"/>
+    </div>
+
+    <div class="row" >
+        <label for="author-input">Author:</label>
+        <select id="author-input" th:field="${book.author.id}">
+        <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}">Пушкин</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <label for="genre-input">Genre:</label>
+        <select id="genre-input" th:field="${book.genre.id}">
+            <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}">Фантастика</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <button type="submit">Save</button>
+    </div>
+
+</body>
+</html>
