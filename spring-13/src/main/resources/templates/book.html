@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book info</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: #d3d3d3;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        .comments, .comments td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+    <script src="/webjars/jquery/3.3.1/jquery.min.js">
+    </script>
+</head>
+<body>
+<a href="/bookList">Return to book list</a>
+<form id="book-form" action="javascript:void(0);">
+    <h1>Book Info:</h1>
+
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" name="id" type="text" readonly="readonly" th:value="${book.id}" value="1"/>
+    </div>
+
+    <div class="row">
+        <label for="name-input">Name:</label>
+        <input id="name-input" type="text" th:value="${book.name}" value="Мастер и Маргарита"/>
+    </div>
+
+    <div class="row">
+        <label for="author-input">Author:</label>
+        <select id="author-input" th:field="${book.author.id}">
+            <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}">Пушкин</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <label for="genre-input">Genre:</label>
+        <select id="genre-input" th:field="${book.genre.id}">
+            <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}">Фантастика</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <button type="submit">Save</button>
+    </div>
+
+</form>
+<form id="delete-book-form" action="javascript:void(0);">
+    <div class="row">
+        <button type="submit">Delete</button>
+    </div>
+</form>
+
+<h1>Comments:</h1>
+<table class="comments">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Commnet</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="comment : ${comments}">
+        <td class="id" th:text="${comment.id}">1</td>
+        <td th:text="${comment.comment}">Ololo</td>
+        <td>
+            <button class="delete">Delete</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<div class="row">
+    <label for="comment-input">New comment:</label>
+    <input id="comment-input"/>
+</div>
+
+<div class="row">
+    <button id="createComment" type="button">Add comment</button>
+</div>
+
+<script inline="javascript">
+    var bookId = $('#id-input')[0].value;
+
+    /*редактирование книги*/
+    $('#book-form').on('submit', (function (e) {
+        var data = {
+            "name": $('#name-input')[0].value,
+            "authorid": $('#author-input option:selected')[0].value,
+            "genreid": $('#genre-input option:selected')[0].value
+        }
+        $.ajax({
+            type: "PATCH",
+            url: '/book/' + bookId,
+            data: data
+        }).fail(function (jqXHR) {
+            alert("Error "+jqXHR.status);
+        });
+    }));
+
+    /*удаление книги*/
+    $("#delete-book-form").on('submit', function () {
+        $.ajax({
+            type: "DELETE",
+            url: '/book/' + bookId
+        }).done(function () {
+            window.location.replace("/bookList");
+        }).fail(function (jqXHR) {
+            alert("Error "+jqXHR.status);
+        });
+    });
+
+    /*добавление коментария*/
+    $('#createComment').on('click', (function (e) {
+        var comment = $('#comment-input')[0].value;
+        var data = {"comment": comment}
+        $.ajax({
+            type: "POST",
+            url: '/book/' + bookId + '/comment',
+            data: data
+        }).done(function (c) {
+            var newElement = $(".comments tbody").append(`
+                    <tr>
+                        <td class="id">` + c + `</td>
+                        <td>` + comment + `</td>
+                        <td>
+                            <button class="delete">Delete</button>
+                        </td>
+                    </tr>
+                `);
+            $(".comments tbody tr:last-child .delete").on('click', function () {
+                var ID = $(this).parents("tr").children(".id").text();
+                var _this = this;
+                $.ajax({
+                    type: "DELETE",
+                    url: '/comment/' + ID
+                }).done(function () {
+                    $(_this).parents("tr:first").remove();
+                }).fail(function (jqXHR) {
+                    alert("Error "+jqXHR.status);
+                });
+            });
+            $('#comment-input')[0].value = "";
+        })
+    }));
+
+    /*удаление коментария*/
+    $("tr td .delete").on('click', function () {
+        var ID = $(this).parents("tr").children(".id").text();
+        var _this = this;
+        $.ajax({
+            type: "DELETE",
+            url: '/comment/' + ID
+        }).done(function () {
+            $(_this).parents("tr:first").remove();
+        }).fail(function (jqXHR) {
+            alert("Error "+jqXHR.status);
+        });
+    });
+
+</script>
+</body>
+</html>
