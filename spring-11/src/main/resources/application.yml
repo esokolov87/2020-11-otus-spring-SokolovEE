@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      database: spring-11
+  main:
+    allow-bean-definition-overriding: true
+mongock:
+  #runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.sokolovee.spring11.mongock.changelog
