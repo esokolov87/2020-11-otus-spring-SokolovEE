@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: eureka-server
+  config:
+    activate:
+      on-profile: dev
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+server:
+  port: 18761
