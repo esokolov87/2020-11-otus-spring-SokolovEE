@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    driver-class-name: ${DB_DRIVER}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    initialization-mode: always
+
+    platform: postgresql
+    data: classpath:/data.sql
+  jpa:
+    generate-ddl: off
+    properties:
+      hibernate:
+        format_sql: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    io.github.resilience4j: DEBUG
+
+debug: true
+
+resilience4j.bulkhead:
+  instances:
+    bookController:
+      maxWaitDuration: 1000ms
+      maxConcurrentCalls: 1
+
