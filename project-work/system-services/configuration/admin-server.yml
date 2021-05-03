@@ -2,7 +2,7 @@ spring:
   application:
     name: admin-server
   profiles:
-    active: dev
+    active: native
 eureka:
   client:
     serviceUrl:
