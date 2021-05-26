@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: gateway
+  profiles:
+    active: dev
+  cloud:
+    gateway:
+      routes:
+        - id: admin_server_route
+          uri: lb://admin-server
+          predicates:
+            - Path=/admin-server/**
+          filters:
+            - StripPrefix=1
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+server.port: 7777
