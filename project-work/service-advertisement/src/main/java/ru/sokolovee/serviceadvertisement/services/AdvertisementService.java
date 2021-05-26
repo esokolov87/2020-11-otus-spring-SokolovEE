@@ -9,6 +9,7 @@ import ru.sokolovee.serviceadvertisement.repositories.AdvertisementRepository;
 @Service
 @RequiredArgsConstructor
 public class AdvertisementService {
+
     private final AdvertisementRepository advRepository;
     private final AdvertisementMapping advMapping;
 

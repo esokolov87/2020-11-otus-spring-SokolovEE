@@ -2,7 +2,7 @@ spring:
   application:
     name: gateway
   profiles:
-    active: native
+    active: dev
 #  cloud:
 #    gateway:
 #      routes:

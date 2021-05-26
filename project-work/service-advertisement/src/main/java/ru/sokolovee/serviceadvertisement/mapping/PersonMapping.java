@@ -2,15 +2,16 @@ package ru.sokolovee.serviceadvertisement.mapping;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import ru.sokolovee.serviceadvertisement.dtos.PersonDto;
+import ru.sokolovee.serviceadvertisement.entities.Authority;
 import ru.sokolovee.serviceadvertisement.entities.Person;
+import ru.sokolovee.serviceadvertisement.entities.User;
 
-@Mapper
+@Mapper(componentModel = "spring", uses = {ContactMapping.class})
 public interface PersonMapping {
 
-    @Mapping(source = "person.user.username", target = "username")
-    PersonDto personToPersonDto(Person person);
+    PersonDto entityToDto(Person person);
 
-    @Mapping(source = "person.user.username", target = "username")
-    Person personDtoToPerson(PersonDto dto);
+    Person dtoToEntity(PersonDto dto);
 }

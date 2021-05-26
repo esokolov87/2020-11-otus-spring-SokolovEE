@@ -7,10 +7,10 @@ import ru.sokolovee.serviceadvertisement.dtos.PersonDto;
 import ru.sokolovee.serviceadvertisement.entities.Contact;
 import ru.sokolovee.serviceadvertisement.entities.Person;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ContactMapping {
 
-    ContactDto contactToContactDto(Contact contact);
+    ContactDto entityToDto(Contact contact);
 
-    Contact contactDtoToContact(ContactDto dto);
+    Contact dtoToEntity(ContactDto dto);
 }

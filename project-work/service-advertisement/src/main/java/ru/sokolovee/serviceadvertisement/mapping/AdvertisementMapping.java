@@ -7,12 +7,10 @@ import ru.sokolovee.serviceadvertisement.dtos.PersonDto;
 import ru.sokolovee.serviceadvertisement.entities.Advertisement;
 import ru.sokolovee.serviceadvertisement.entities.Person;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {PersonMapping.class})
 public interface AdvertisementMapping {
 
-    @Mapping(source = "person.user.name", target = "username")
     AdvertisementDto advToAdvDto(Advertisement advertisement);
 
-    @Mapping(source = "person.user.name", target = "username")
     Advertisement advDtoToAdv(AdvertisementDto dto);
 }

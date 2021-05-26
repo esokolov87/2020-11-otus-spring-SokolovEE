@@ -10,5 +10,7 @@ public class PersonDto {
     private String username;
     private String password;
     private String fullName;
+    private String authority;
     private List<ContactDto> contacts;
+    private Boolean enabled;
 }
