@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: eureka-server
+  config:
+    activate:
+      on-profile: dev
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+  instance:
+    prefer-ip-address: true   
+server:
+  port: 8761

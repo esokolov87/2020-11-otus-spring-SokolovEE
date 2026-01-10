@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: admin-server
+  config:
+    activate:
+      on-profile: dev
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 7000
